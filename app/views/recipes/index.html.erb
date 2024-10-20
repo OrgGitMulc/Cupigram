@@ -1,5 +1,9 @@
 <h1>Recipes#index</h1>
 <p>Find me in app/views/recipes/index.html.erb</p>
+<ul>
+  <li>https://www.bbcgoodfood.com/recipes/chocolate-chunk-cookies</li>
+  <li>https://www.marthastewart.com/344840/soft-and-chewy-chocolate-chip-cookies</li>
+</ul>
 
 <%= form_with url: scrape_recipes_path, method: :post, local: true do |f| %>
   <div>
@@ -11,9 +15,12 @@
   </div>
 <% end %>
 
-<% if @recipe %>
-  <h2>Scraped Recipe</h2>
-  <p><strong>Title:</strong> <%= @recipe.title %></p>
-  <p><strong>Ingredients:</strong> <%= @recipe.ingredients %></p>
-  <p><strong>Instructions:</strong> <%= @recipe.instructions %></p>
+<% if @ingredients.any? %>
+  <ul>
+    <% @ingredients.each do |ingredient| %>
+      <li><%= ingredient %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No ingredients found.</p>
 <% end %>
