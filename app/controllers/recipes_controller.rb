@@ -17,9 +17,10 @@ class RecipesController < ApplicationController
     ingredients = []
 
     # Search for the <h2> element that contains "Ingredients"
-    ingredients_heading = doc.at_xpath("//h2[contains(text(), 'Ingredients')]")
+    ingredients_heading = doc.at_xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'Ingredients')]")
+    needs_heading = doc.xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'What you need')]")
 
-    if ingredients_heading
+    if ingredients_heading 
       # Look for a given adjacent element that contains the <ul> with the ingredients
       section_element = ingredients_heading.xpath("following::section[1]").first
       ul_element = ingredients_heading.xpath("following::ul").first
@@ -37,6 +38,19 @@ class RecipesController < ApplicationController
         ingredients = ul_element.xpath("li").map(&:text)
       end
 
+    elsif needs_heading
+      ingredients_container = needs_heading.xpath("following::div").first
+
+      if ingredients_container
+        ul_element = ingredients_container.xpath("ul").first
+
+        if ul_element
+          # Extract the text from each <li> within the <ul>
+          ingredients = ul_element.xpath("li").map(&:text)
+        end
+
+      end
+    
       
     end
 
