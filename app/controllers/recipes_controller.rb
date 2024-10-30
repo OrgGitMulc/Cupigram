@@ -26,46 +26,39 @@ class RecipesController < ApplicationController
       # Search for the <h*> element that contains "What you need" incase it is the title of the ingredients
       needs_heading = doc.xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'What you need')]")
 
-      if ingredients_heading 
-        section_element = ingredients_heading.xpath("following::section[1]").first
-
-        div_element = ingredients_heading.xpath("following::div[1]").first
-
-        ul_element = ingredients_heading.xpath("following::ul[1]").first
-
-        if section_element
-          # Find the <ul> within that section
-          ul_element_adj = section_element.xpath("ul").first
+      if ingredients_heading || needs_heading
+        heading = ingredients_heading || needs_heading
+      
+        # Find the closest following section, div, or ul
+        container = heading.xpath("following::section[1] | following::div[1] | following::ul[1]").first
+      
+        # Process the container if found
+        if container
+          # Look for ul within the found container
+          ul_element = container.at_xpath(".//ul") || container.at_xpath("following::ul[1]")
+          li_elements = ul_element.xpath(".//li")
+          ul_elements = container.xpath(".//ul")
           
-          if ul_element_adj
-            # Extract the text from each <li> within the <ul>
-            ingredients = ul_element_adj.xpath("li").map(&:text)
-          end
-
-        elsif div_element
-          ul_element_adj = div_element.xpath(".//ul").first
-
-          if ul_element_adj
-            ingredients = ul_element_adj.xpath(".//li").map(&:text)
+          # Extract items if multiple ul_elements are found
+          if ul_elements.any?
+            ul_elements.each do |ul_element|
+              # Collect the text from each <li> in the current <ul>
+              ingredients.concat(ul_element.xpath(".//li").map(&:text))
+            end
+          # Extract items if ul_element is found
+          elsif ul_element
+            ingredients = ul_element.xpath(".//li").map(&:text)
+          
+          elsif li_elements
+            ingredients = li_elements.map do |li|
+              label = li.at_xpath(".//label")
+              label ? label.text.strip : li.text.strip
+            end
           else
-            ingredients = div_element.xpath(".//li").map(&:text)
+            # As a fallback, get all li elements directly within the container
+            li_elements = container.xpath(".//li").map(&:text)
+            ingredients.concat(li_elements) unless li_elements.empty?
           end
-        
-        elsif ul_element
-          ingredients = ul_element.xpath("li").map(&:text)
-        end
-
-      elsif needs_heading
-        ingredients_container = needs_heading.xpath("following::div").first
-
-        if ingredients_container
-          ul_element = ingredients_container.xpath("ul").first
-
-          if ul_element
-            # Extract the text from each <li> within the <ul>
-            ingredients = ul_element.xpath("li").map(&:text)
-          end
-
         end
       end
 
