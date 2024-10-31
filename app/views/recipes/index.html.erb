@@ -25,9 +25,19 @@
 <% end %>
 
 <% if @ingredients.any? %>
+  <h2>Extracted Ingredients</h2>
   <ul>
     <% @ingredients.each do |ingredient| %>
       <li><%= ingredient %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @parsed_ingredients.any? %>
+  <h2>Parsed Ingredients</h2>
+  <ul>
+    <% @parsed_ingredients.each do |parsed_ingredient| %>
+      <li><%= parsed_ingredient %></li>
     <% end %>
   </ul>
 <% end %>

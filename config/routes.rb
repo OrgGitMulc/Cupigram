@@ -1,19 +1,17 @@
 Rails.application.routes.draw do
+  # Routes for the recipes controller
   resources :recipes do
     collection do
-      post 'scrape', to: 'recipes#scrape'
+      post 'scrape', to: 'recipes#scrape'  # Handles scraping from a given URL
     end
   end
-  get 'recipes/index'
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  
+  # Explicitly define the index route, though this is not necessary since 'resources :recipes' already provides it.
+  get 'recipes/index'  # Optional: This can be removed if you're only using the index as the root.
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check route for monitoring application status
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
-
-  # Custom paths
-  root "recipes#index"
+  root "recipes#index"  # Sets the root path to the recipes index
 end
