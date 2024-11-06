@@ -22,3 +22,9 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+Tech used:
+ - Nokogiri
+ - Devise
+ - Bootstrap

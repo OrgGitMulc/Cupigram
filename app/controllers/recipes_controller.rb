@@ -77,10 +77,10 @@ class RecipesController < ApplicationController
   end
 
   def parse_line(line)
-    match = line.match(/(?<quantity>\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s(?<ingredient>.*?)(\((?<alt_quantity>[\d\s\w;]+)\))?/)
+    match = line.match(/(?<quantity>\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s(?<ingredient>.+)(\((?<alt_quantity>[\d\s\w;]+)\))?/)
     
     if match
-      "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}".strip
+      "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}"
     else
       line.strip
     end
