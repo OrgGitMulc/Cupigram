@@ -19,6 +19,12 @@
     <%= f.label :url, "Enter recipe URL:" %>
     <%= f.text_field :url, placeholder: "https://example.com/recipe" %>
   </div>
+
+  <div>
+    <%= f.label :unit, "Select Unit System:" %><br>
+    <%= f.radio_button :unit, "metric" %> <%= f.label :unit, "Metric Units" %><br>
+    <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
+  </div>
   <div>
     <%= f.submit "Scrape Recipe" %>
   </div>

@@ -11,13 +11,24 @@ class RecipesController < ApplicationController
   def scrape
     url = params[:url]
     headers = { "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
+    unit = params[:unit]
+    puts "Selected unit: #{unit}"
+
+    if unit == "us_customary"
+      puts "Convert to US Customary Units"
+    elsif unit == "metric"
+      puts "Convert to Metric Units"
+    else
+      puts "No units selected"
+    end
+    
     
     begin
       doc = Nokogiri::HTML(URI.open(url, headers))
       ingredients = extract_ingredients(doc)
 
       # Print the ingredients for debugging purposes
-      puts "Ingredients: #{ingredients.join(", ")}"
+      puts "Ingredients: #{ingredients.join(" ")}"
 
       # Render the scraped data
       @ingredients = ingredients
@@ -28,6 +39,7 @@ class RecipesController < ApplicationController
       puts "Error fetching the URL: #{e.message}"
       @ingredients = ["Unable to access the provided URL."]
       render :index
+      
     end
   end
 
@@ -36,7 +48,6 @@ class RecipesController < ApplicationController
   def extract_ingredients(doc)
     ingredients = []
 
-    # Your existing ingredient extraction logic...
     ingredients_heading = doc.at_xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'Ingredients')]")
     needs_heading = doc.xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'What you need')]")
 
