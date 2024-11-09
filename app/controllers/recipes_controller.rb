@@ -3,6 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 class RecipesController < ApplicationController
+  include RecipesHelper
   def index
     @ingredients = []
     @parsed_ingredients = [] # For storing parsed ingredients separately
@@ -12,15 +13,6 @@ class RecipesController < ApplicationController
     url = params[:url]
     headers = { "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
     unit = params[:unit]
-    puts "Selected unit: #{unit}"
-
-    if unit == "us_customary"
-      puts "Convert to US Customary Units"
-    elsif unit == "metric"
-      puts "Convert to Metric Units"
-    else
-      puts "No units selected"
-    end
     
     
     begin
@@ -33,6 +25,32 @@ class RecipesController < ApplicationController
       # Render the scraped data
       @ingredients = ingredients
       @parsed_ingredients = parse_existing_ingredients(@ingredients)
+
+      # conversion helpers & logic go here
+
+      puts "Selected unit: #{unit}"
+
+      if unit == "us_customary"
+        puts "Convert to US Customary Units"
+      elsif params[:unit] == "metric"
+        puts "Convert to Metric Units"
+        @parsed_ingredients = @parsed_ingredients.map do |ingredient|
+          # If it's a hash (it has a unit), process it
+        if ingredient.is_a?(Hash)
+          if ingredient[:unit] # Only convert if unit exists
+            convert_to_metric(ingredient)
+          else
+            ingredient[:ingredient] # Skip conversion for ingredients without units
+          end
+        else
+          # If it's a string (no unit), just return the ingredient as is
+          ingredient
+        end
+      end
+      else
+        puts "No units selected"
+      end
+
       render :index
 
     rescue OpenURI::HTTPError => e
@@ -88,12 +106,22 @@ class RecipesController < ApplicationController
   end
 
   def parse_line(line)
-    match = line.match(/(?<quantity>\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s(?<ingredient>.+)(\((?<alt_quantity>[\d\s\w;]+)\))?/)
+    match = line.match(/(?<quantity>\d+\s\d+\/\d+|\d+\/\d+|\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s(?<ingredient>.+)/)
     
     if match
-      "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}"
+      if match[:unit].nil? || match[:unit].empty?
+        { ingredient: match[:ingredient].strip }
+      else
+        {
+          quantity: match[:quantity],
+          unit: match[:unit].strip,
+          ingredient: match[:ingredient].strip
+        }
+      end
     else
-      line.strip
+      # { ingredient: line.strip, unit: nil, quantity: nil }
+      # "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}"
+      line
     end
   end
 end
