@@ -9,12 +9,10 @@ class RecipesController < ApplicationController
     @parsed_ingredients = [] # For storing parsed ingredients separately
   end
 
-  def scrape
+  def extract
     url = params[:url]
     headers = { "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
     unit = params[:unit]
-    
-    
     begin
       doc = Nokogiri::HTML(URI.open(url, headers))
       ingredients = extract_ingredients(doc)
@@ -22,12 +20,11 @@ class RecipesController < ApplicationController
       # Print the ingredients for debugging purposes
       puts "Ingredients: #{ingredients.join(" ")}"
 
-      # Render the scraped data
+      # Render the extracted data
       @ingredients = ingredients
       @parsed_ingredients = parse_existing_ingredients(@ingredients)
 
       # conversion helpers & logic go here
-
       puts "Selected unit: #{unit}"
 
       if unit == "us_customary"
@@ -40,7 +37,7 @@ class RecipesController < ApplicationController
           if ingredient[:unit] # Only convert if unit exists
             convert_to_metric(ingredient)
           else
-            ingredient[:ingredient] # Skip conversion for ingredients without units
+            "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip
           end
         else
           # If it's a string (no unit), just return the ingredient as is
@@ -106,22 +103,20 @@ class RecipesController < ApplicationController
   end
 
   def parse_line(line)
-    match = line.match(/(?<quantity>\d+\s\d+\/\d+|\d+\/\d+|\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s(?<ingredient>.+)/)
-    
+    # Adjusted regex to capture quantity, optional unit, and ingredient
+    match = line.match(/^(?<quantity>\d+\s\d+\/\d+|\d+\/\d+|\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s?(?<ingredient>.+)$/)
+  
     if match
-      if match[:unit].nil? || match[:unit].empty?
-        { ingredient: match[:ingredient].strip }
-      else
-        {
-          quantity: match[:quantity],
-          unit: match[:unit].strip,
-          ingredient: match[:ingredient].strip
-        }
-      end
+      {
+        quantity: match[:quantity].strip,
+        unit: match[:unit]&.strip, # Only add `unit` if it’s present
+        ingredient: match[:ingredient].strip
+      }.compact # Remove any nil values from the hash
     else
-      # { ingredient: line.strip, unit: nil, quantity: nil }
+      # Return the line as-is if it doesn't match the pattern
+      { ingredient: line.strip, unit: nil, quantity: nil }
       # "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}"
-      line
+      # line.strip
     end
   end
 end

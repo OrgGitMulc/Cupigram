@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Routes for the recipes controller
   resources :recipes do
     collection do
-      post 'scrape', to: 'recipes#scrape'  # Handles scraping from a given URL
+      post 'extract', to: 'recipes#extract'  # Handles scraping from a given URL
     end
   end
   

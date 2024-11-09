@@ -2,23 +2,17 @@
 <p>Find me in app/views/recipes/index.html.erb</p>
 
 <h4>Works on:</h4>
+
 <ul>
-  <li>https://www.bbcgoodfood.com/recipes/pumpkin-pie</li>
-  <li>https://www.seriouseats.com/shoofly-pie-recipe-8701529</li>
-  <li>https://www.allrecipes.com/mini-chicken-pot-pies-recipe-8735456</li>
-  <li>https://www.allrecipes.com/recipe/16573/chicken-fried-chicken/</li>
+  <li>https://www.seriouseats.com/</li>
+  <li>https://www.allrecipes.com/</li>
+  <li>https://www.simplyrecipes.com/</li>
 </ul>
 
-<h4>To Do:</h4>
-<ul>
-  <li>https://foodnetwork.co.uk/recipes/kadhi-pakora</li>
-  <li>https://www.food.com/recipe/crock-pot-beef-roast-384905</li>
-</ul>
-
-<%= form_with url: scrape_recipes_path, method: :post, local: true do |f| %>
+<%= form_with url: extract_recipes_path, method: :post, local: true do |f| %>
   <div>
     <%= f.label :url, "Enter recipe URL:" %>
-    <%= f.text_field :url, placeholder: "https://example.com/recipe" %>
+    <%= f.text_field :url, placeholder: "https://example.com/recipe", size: 50 %>
   </div>
 
   <div>
@@ -27,7 +21,7 @@
     <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
   </div>
   <div>
-    <%= f.submit "Scrape Recipe" %>
+    <%= f.submit "Extract Recipe" %>
   </div>
 <% end %>
 
