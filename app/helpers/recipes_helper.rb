@@ -15,6 +15,14 @@ module RecipesHelper
     # Add other conversions as needed
   }.freeze
 
+  DENSITIES = {
+    "flour" => 0.53,       # 1 ml of flour = 0.53 grams
+    "sugar" => 0.85,       # 1 ml of sugar = 0.85 grams
+    "milk" => 1.03,        # 1 ml of milk = 1.03 grams
+    "cream" => 0.97,       # 1 ml of cream = 0.97 grams
+    "oil" => 0.92          # 1 ml of oil = 0.92 grams
+  }.freeze
+
   # List of liquids that should be converted to milliliters
   LIQUIDS = ["water", "milk", "buttermilk", "vegetable oil", "oil", "cream"].freeze
 
@@ -34,27 +42,33 @@ module RecipesHelper
 
   # Helper to convert a parsed ingredient to metric if a unit is present
   def convert_to_metric(parsed_ingredient)
-    # Separate parsed data
     quantity = parse_quantity(parsed_ingredient[:quantity])
     unit = parsed_ingredient[:unit]&.downcase
     ingredient_name = parsed_ingredient[:ingredient]
 
-    # Determine if the ingredient is a liquid
+    # Check if the ingredient has a density specified
+    # density = DENSITIES[ingredient_name.downcase] if DENSITIES.key?(ingredient_name.downcase)
+    density_key = DENSITIES.keys.find { |key| ingredient_name.downcase.include?(key) }
+    density = DENSITIES[density_key] if density_key
     is_liquid = LIQUIDS.any? { |liquid| ingredient_name.downcase.include?(liquid) }
 
-    # Only convert if the unit exists in the conversion table
     if unit && UNIT_CONVERSIONS.key?(unit)
-      if is_liquid
-        # Convert to milliliters for liquids
+      if density
+        # Convert based on density if density is available for the ingredient
+        metric_quantity = quantity * UNIT_CONVERSIONS[unit] * density
+        unit_label = is_liquid ? "ml" : "g"  # Set appropriate unit for liquid or solid
+        "#{metric_quantity.round(2)}#{unit_label} #{ingredient_name}"
+      elsif is_liquid
+        # Convert to milliliters for liquids without specific density
         metric_quantity = quantity * UNIT_CONVERSIONS[unit]
         "#{metric_quantity.round(2)}ml #{ingredient_name}"
       else
-        # Convert to grams for solids
+        # Convert to grams for other solids
         metric_quantity = quantity * UNIT_CONVERSIONS[unit]
         "#{metric_quantity.round(2)}g #{ingredient_name}"
       end
     else
-      # Return original ingredient if no conversion is applicable
+      # Return the original ingredient if no conversion is applicable
       "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
     end
   end
