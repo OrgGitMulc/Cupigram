@@ -27,26 +27,34 @@ class RecipesController < ApplicationController
       # conversion helpers & logic go here
       puts "Selected unit: #{unit}"
 
-      if unit == "us_customary"
-        puts "Convert to US Customary Units"
-      elsif params[:unit] == "metric"
-        puts "Convert to Metric Units"
-        @parsed_ingredients = @parsed_ingredients.map do |ingredient|
-          # If it's a hash (it has a unit), process it
-        if ingredient.is_a?(Hash)
-          if ingredient[:unit] # Only convert if unit exists
-            convert_to_metric(ingredient)
-          else
-            "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip
-          end
+    if params[:unit] == "us_customary"
+      puts "Convert to US Customary Units"
+      @parsed_ingredients = @parsed_ingredients.map do |ingredient|
+        if ingredient.is_a?(Hash) && ingredient[:unit] # Process only if it's a hash and has a unit
+          convert_to_us_custom(ingredient)
+        elsif ingredient.is_a?(Hash)
+          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip # If it's a hash without a unit
         else
-          # If it's a string (no unit), just return the ingredient as is
-          ingredient
+          ingredient # If it's a string, return as is
         end
       end
-      else
-        puts "No units selected"
+    
+    elsif params[:unit] == "metric"
+      puts "Convert to Metric Units"
+      @parsed_ingredients = @parsed_ingredients.map do |ingredient|
+        if ingredient.is_a?(Hash) && ingredient[:unit] # Process only if it's a hash and has a unit
+          convert_to_metric(ingredient)
+        elsif ingredient.is_a?(Hash)
+          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip # If it's a hash without a unit
+        else
+          ingredient # If it's a string, return as is
+        end
       end
+    
+    else
+      puts "No units selected"
+    end
+    
 
       render :index
 
@@ -63,8 +71,16 @@ class RecipesController < ApplicationController
   def extract_ingredients(doc)
     ingredients = []
 
+    # this targets generic ingredients heading found in most HTML 
     ingredients_heading = doc.at_xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'Ingredients')]")
+
+    # targets ingredients that conmtain the heading What You Need instead of the ingredients
     needs_heading = doc.xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'What you need')]")
+
+    # targets any ingredients that have the ingredients string in any tab based sections
+    tabs_heading = ingredients_heading&.xpath("following::section[1] | following::div[1]") ||
+              doc.at_css("div.tabbed-list") ||  # fallback to specific known structures
+              doc.at_xpath("//*[contains(@class, 'ingredients') or contains(@class, 'list')]")
 
     if ingredients_heading || needs_heading
       heading = ingredients_heading || needs_heading
@@ -92,6 +108,25 @@ class RecipesController < ApplicationController
         end
       end
     end
+
+    if tabs_heading
+
+      tabs_heading.each do |tab|
+        ul_elements = tabs_heading.xpath(".//ul")
+    
+        ul_elements.each do |ul_element|
+          ul_element.xpath(".//li").each do |li|
+            text = li.text.strip
+            # removes any nutrional info that may be extracted
+            unless text =~ /kcal|fat|saturates|carbs|sugars|fibre|protein|salt/i
+              ingredients << text
+            end
+          end
+        end
+      end
+    end
+
+
 
     ingredients.empty? ? ["No ingredients found in the expected format."] : ingredients
   end

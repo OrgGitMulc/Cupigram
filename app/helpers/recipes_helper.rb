@@ -12,7 +12,9 @@ module RecipesHelper
     "teaspoons" => 5,        # 1 teaspoon = 5 grams
     "pounds" => 453.6,    # 1 pound = 453.6 grams
     "pound" => 453.6,    # 1 pound = 453.6 grams
-    # Add other conversions as needed
+    "gram" => 0.00422675,  # Conversion from grams to cups (general solid density)
+    "g" => 0.00422675,  # Conversion from grams to cups (general solid density)
+    "ml" => 0.00422675,    # Conversion from milliliters to cups (liquids)
   }.freeze
 
   DENSITIES = {
@@ -69,6 +71,39 @@ module RecipesHelper
       end
     else
       # Return the original ingredient if no conversion is applicable
+      "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
+    end
+  end
+
+  def convert_to_us_custom(parsed_ingredient)
+    quantity = parse_quantity(parsed_ingredient[:quantity])
+    unit = parsed_ingredient[:unit]&.downcase
+    ingredient_name = parsed_ingredient[:ingredient]
+  
+    # Find density and liquid status
+    density_key = DENSITIES.keys.find { |key| ingredient_name.downcase.include?(key) }
+    density = DENSITIES[density_key] if density_key
+    is_liquid = LIQUIDS.any? { |liquid| ingredient_name.downcase.include?(liquid) }
+  
+    if unit && UNIT_CONVERSIONS.key?(unit)
+      conversion_factor = UNIT_CONVERSIONS[unit]
+  
+      if density && !is_liquid
+        # Adjust conversion for solid ingredients based on density
+        us_quantity = (quantity * density) * conversion_factor
+        "#{us_quantity.round(2)} cups #{ingredient_name}"
+      elsif is_liquid
+        # Convert liquid units
+        us_quantity = quantity * conversion_factor
+        "#{us_quantity.round(2)} cups #{ingredient_name}"
+      else
+        # Default conversion if no density or liquid status is found
+        us_quantity = quantity * conversion_factor
+        "#{us_quantity.round(2)} cups #{ingredient_name}"
+      end
+  
+    else
+      # Return original ingredient format if no conversion unit found
       "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
     end
   end
