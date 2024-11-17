@@ -27,4 +27,5 @@ Things you may want to cover:
 Tech used:
  - Nokogiri
  - Devise
+ - bcrypt
  - Bootstrap

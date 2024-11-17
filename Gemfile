@@ -29,6 +29,7 @@ gem "jbuilder"
 gem 'nokogiri'
 gem 'selenium-webdriver'
 gem 'webdrivers'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
