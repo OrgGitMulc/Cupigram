@@ -22,8 +22,10 @@ Rails.application.routes.draw do
 
   get 'login', to: 'sessions#new', as: :login
   post 'login', to: 'sessions#create'
-  
+
   delete 'logout', to: 'sessions#destroy', as: :logout
+
+  resources :users, only: [:show]
 
   # Defines the root path route ("/")
   root "recipes#index"  # Sets the root path to the recipes index

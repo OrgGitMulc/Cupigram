@@ -55,6 +55,19 @@ class RecipesController < ApplicationController
       puts "No units selected"
     end
     
+    if session[:user_id]
+      user = User.find(session[:user_id])
+      recipe_history = user.recipe_histories.create(
+        url: url, 
+        ingredients: @parsed_ingredients # Save as raw data
+      )
+
+      if recipe_history.persisted?
+        Rails.logger.debug "Recipe history saved successfully!"
+      else
+        Rails.logger.error "Failed to save recipe history: #{recipe_history.errors.full_messages}"
+      end
+    end
 
       render :index
 
