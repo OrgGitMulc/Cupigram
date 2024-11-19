@@ -1,6 +1,8 @@
 <body>
   <h1>Your Recipe History</h1>
 
+  <%= link_to "Back", recipes_path, class: "btn btn-primary" %>
+
   <% if @recipe_histories.any? %>
     <ul>
       <% @recipe_histories.each do |recipe_history| %>

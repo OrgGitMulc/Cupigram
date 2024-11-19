@@ -1,16 +1,13 @@
 <h1>Recipes#index</h1>
 
 <% if session[:user_id] %>
+  <%= link_to "View Recipe History", user_path(session[:user_id]) %>
   <%= form_with url: logout_path, method: :delete, local: true do %>
     <%= submit_tag "Logout"%>
   <% end %>
 <% else %>
   <%= link_to "Sign Up", signup_path, class: "btn btn-link" %> |
   <%= link_to "Login", login_path, class: "btn btn-link" %>
-<% end %>
-
-<% if session[:user_id] %>
-  <%= link_to "View Recipe History", user_path(session[:user_id]) %>
 <% end %>
 
 <h4>Works on:</h4>
