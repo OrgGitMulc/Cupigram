@@ -1,26 +1,23 @@
-<h1>Recipes#index</h1>
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="<%= root_path %>">Cupigram</a>
+    <div>
+    <% if session[:user_id] %>
+      <%= link_to "View Recipe History", user_path(session[:user_id]) %>
+      <%= form_with url: logout_path, method: :delete, local: true do %>
+        <%= submit_tag "Logout"%>
+      <% end %>
 
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown button
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <li><a class="dropdown-item" href="#">Action</a></li>
-    <li><a class="dropdown-item" href="#">Another action</a></li>
-    <li><a class="dropdown-item" href="#">Something else here</a></li>
-  </ul>
-</div>
+    <% else %>
+    <%= link_to "Sign Up", signup_path, class: "btn btn-outline-primary" %>  
+    <%= link_to "Login", login_path, class: "btn btn-outline-primary" %>
+    <% end %>
+    </div>
+  </div>
+</nav>
 
 
-<% if session[:user_id] %>
-  <%= link_to "View Recipe History", user_path(session[:user_id]) %>
-  <%= form_with url: logout_path, method: :delete, local: true do %>
-    <%= submit_tag "Logout"%>
-  <% end %>
-<% else %>
-  <%= link_to "Sign Up", signup_path, class: "btn btn-link" %> |
-  <%= link_to "Login", login_path, class: "btn btn-link" %>
-<% end %>
+
 
 <h4>Works on:</h4>
 
