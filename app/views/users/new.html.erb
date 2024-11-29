@@ -1,23 +1,35 @@
-<h1>Sign Up</h1>
-
-<% if flash[:alert] %>
-  <div class="alert alert-danger">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
-<%= form_with model: @user, url: signup_path, local: true do |form| %>
-  <div>
-    <%= form.label :email %>
-    <%= form.email_field :email, required: true %>
+<div class="container-fluid">
+  <div class="row text-center">
+    <% if flash[:alert] %>
+      <div class="alert alert-danger">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
   </div>
 
-  <div>
-    <%= form.label :password %>
-    <%= form.password_field :password, required: true %>
-  </div>
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col text-center">
+      <h1>Sign Up</h1>
 
-  <div>
-    <%= form.submit "Sign Up" %>
+      <%= form_with model: @user, url: signup_path, local: true do |form| %>
+        <div class="mb-3">
+          <%= form.label :email, "Email address", class: "form-label" %>
+          <%= form.email_field :email, class: "form-control", id: "exampleFormControlInput1", placeholder: "name@example.com", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.label :password, "Password", class: "form-label" %>
+          <%= form.password_field :password, class: "form-control", id: "exampleFormControlTextarea1", required: true %>
+        </div>
+
+        <div class="mb-3">
+          <%= form.submit "Sign Up", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+    <div class="col">
+    </div>
   </div>
-<% end %>
+</div>

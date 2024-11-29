@@ -17,31 +17,52 @@
 </nav>
 
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col align-self-center">
+      <h4 class="text-center">How it works</h4>
+        <div class="container">
+          <ul class="list-group">
+            <li class="list-group-item">Item 1</li>
+            <li class="list-group-item">Item 2</li>
+          </ul>
+          <ul>
+            <li>Step 1</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <div class="row text-center">
+    <div class="col">
+      <%= form_with url: extract_recipes_path, method: :post, local: true do |f| %>
+        <%= f.label :url, "Enter recipe URL below:", class: "h4" %>
+        <div>
+          <%= f.text_field :url, placeholder: "https://example.com/recipe", size: 50 %>
+        </div>
 
-
-<h4>Works on:</h4>
-
-<ul>
-  <li>https://www.seriouseats.com/</li>
-  <li>https://www.allrecipes.com/</li>
-  <li>https://www.simplyrecipes.com/</li>
-</ul>
-
-<%= form_with url: extract_recipes_path, method: :post, local: true do |f| %>
-  <div>
-    <%= f.label :url, "Enter recipe URL:" %>
-    <%= f.text_field :url, placeholder: "https://example.com/recipe", size: 50 %>
+        <div>
+          <%= f.label :unit, "Convert to:" %><br>
+          <%= f.radio_button :unit, "metric" %> <%= f.label :unit, "Metric Units" %> | 
+          <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
+        </div>
+        <div>
+          <%= f.submit "Extract Recipe", class: "btn btn-primary" %>
+        </div>
+      <% end %>
   </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+    <h4>Carosel here</h4>
+    <h4>Works on:</h4>
+      <p>https://www.seriouseats.com/</p>
+      <p>https://www.allrecipes.com/</p>
+      <p>https://www.simplyrecipes.com/</p>
+    </div>
+  </div>
+  </div>
+</div>
 
-  <div>
-    <%= f.label :unit, "Select Unit System:" %><br>
-    <%= f.radio_button :unit, "metric" %> <%= f.label :unit, "Metric Units" %><br>
-    <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
-  </div>
-  <div>
-    <%= f.submit "Extract Recipe" %>
-  </div>
-<% end %>
 
 <% if @ingredients.any? %>
   <h2>Extracted Ingredients</h2>
