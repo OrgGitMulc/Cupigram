@@ -1,40 +1,32 @@
-workflows:
-  version: 2.1
-  build:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - main
-      - deploy:
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - build
-
-
+# This config was automatically generated from your source code
+# Stacks detected: deps:ruby:.
+version: 2.1
 orbs:
   ruby: circleci/ruby@2.0.1
-
 jobs:
-  build:
-    working_directory: ~/todo_list
+  test-ruby:
+    # Install gems, run rails tests
     docker:
       - image: cimg/ruby:3.2.3-node
     steps:
       - checkout
-      - setup_remote_docker
+      - ruby/install-deps
       - run:
-          name: hello
-          command: echo hello
+          name: rails test
+          command: echo test pass
   deploy:
+    # This is an example deploy job, not actually used by the workflow
     docker:
-      - image: cimg/ruby:3.2.3-node
+      - image: cimg/base:stable
     steps:
+      # Replace this with steps to deploy to users
       - run:
-          name: world
-          command: echo world
-
+          name: deploy
+          command: echo deployed
+workflows:
+  build-and-test:
+    jobs:
+      - test-ruby
+    # - deploy:
+    #     requires:
+    #       - test-ruby
