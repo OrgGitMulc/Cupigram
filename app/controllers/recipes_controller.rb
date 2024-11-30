@@ -10,6 +10,11 @@ class RecipesController < ApplicationController
   end
 
   def extract
+    if params[:url].blank?
+      flash[:alert] = "URL is required to extract the recipe."
+      return redirect_to recipes_path  # Or render :index if you prefer not to redirect
+    end
+
     url = params[:url]
     headers = { "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
     unit = params[:unit]

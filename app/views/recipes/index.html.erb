@@ -18,6 +18,13 @@
 
 
 <div class="container-fluid">
+  <div class="row text-center">
+    <% if flash[:alert] %>
+      <div class="alert alert-danger">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+  </div>
   <div class="row">
     <div class="col align-self-center">
       <h4 class="text-center">How it works</h4>
