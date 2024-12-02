@@ -27,6 +27,4 @@ workflows:
   build-and-test:
     jobs:
       - test-ruby
-    # - deploy:
-    #     requires:
-    #       - test-ruby
+      - deploy
