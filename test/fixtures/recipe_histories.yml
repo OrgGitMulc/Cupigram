@@ -1,11 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  user: one
-  ingredients: MyText
-  url: MyString
-
-two:
-  user: two
-  ingredients: MyText
-  url: MyString
+# history_one:
+#   id: 1
+#   url: https://example.com/recipe1
+#   ingredients: []
+#   user_id: 1
