@@ -23,6 +23,10 @@
       <div class="alert alert-danger">
         <%= flash[:alert] %>
       </div>
+    <% elsif flash[:notice] %>
+      <div class="alert alert-success">
+        <%= flash[:notice] %>
+      </div>
     <% end %>
   </div>
   <div class="row">
