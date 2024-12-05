@@ -30,6 +30,7 @@ gem 'nokogiri'
 gem 'selenium-webdriver'
 gem 'webdrivers'
 gem 'bcrypt', '~> 3.1.7'
+gem 'rack-test'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -68,5 +69,5 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
-  gem "selenium-webdriver"
+  # gem "selenium-webdriver"
 end
