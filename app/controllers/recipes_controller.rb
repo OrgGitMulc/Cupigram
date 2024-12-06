@@ -1,6 +1,7 @@
 # app/controllers/recipes_controller.rb
 require 'nokogiri'
 require 'open-uri'
+require 'set'
 
 class RecipesController < ApplicationController
   include RecipesHelper
@@ -87,7 +88,8 @@ class RecipesController < ApplicationController
   private
 
   def extract_ingredients(doc)
-    ingredients = []
+    # Convert to set, easier to manipulate and concat
+    ingredients = Set.new
 
     # this targets generic ingredients heading found in most HTML 
     ingredients_heading = doc.at_xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'Ingredients')]")
@@ -111,14 +113,18 @@ class RecipesController < ApplicationController
 
         if ul_elements.any?
           ul_elements.each do |ul_element|
-            ingredients.concat(ul_element.xpath(".//li").map(&:text))
+            ul_element.xpath(".//li").each do |li|
+              ingredients.add(li.text.strip)  # Add ingredient to the Set
+            end
           end
         elsif ul_element
-          ingredients = ul_element.xpath(".//li").map(&:text)
+          ul_element.xpath(".//li").each do |li|
+            ingredients.add(li.text.strip)  # Add ingredient to the Set
+          end
         elsif li_elements
-          ingredients = li_elements.map do |li|
+          li_elements.each do |li|
             label = li.at_xpath(".//label")
-            label ? label.text.strip : li.text.strip
+            label ? ingredients.add(label.text.strip) : ingredients.add(li.text.strip)
           end
         else
           li_elements = container.xpath(".//li").map(&:text)
@@ -137,7 +143,7 @@ class RecipesController < ApplicationController
             text = li.text.strip
             # removes any nutrional info that may be extracted
             unless text =~ /kcal|fat|saturates|carbs|sugars|fibre|protein|salt/i
-              ingredients << text
+              ingredients.add(text)
             end
           end
         end
@@ -145,8 +151,8 @@ class RecipesController < ApplicationController
     end
 
 
-
-    ingredients.empty? ? ["No ingredients found in the expected format."] : ingredients
+    # If ingredients empty populate with error msg, else convert set to an array for helper functions
+    ingredients.empty? ? ["No ingredients found in the expected format."] : ingredients.to_a
   end
 
   def parse_existing_ingredients(ingredients)
