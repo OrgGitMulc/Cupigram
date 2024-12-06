@@ -86,7 +86,7 @@ jobs:
     steps:
       - run:
           name: deploy-application to ec2
-          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "export CONTAINER_NAME=\"$CONTAINER_NAME\"; export IMAGE_NAME=\"$IMAGE_NAME\"; rm -rf cupigram/; git clone https://github.com/OrgGitMulc/Cupigram; source cupigram/deploy.sh"
+          command: ssh -o StrictHostKeyChecking=no $EC2_USERNAME@$EC2_PUBLIC_DNS "export CONTAINER_NAME=\"$CONTAINER_NAME\"; export IMAGE_NAME=\"$IMAGE_NAME\"; rm -rf Cupigram/; git clone https://github.com/OrgGitMulc/Cupigram; source Cupigram/deploy.sh"
              
           
 workflows:
