@@ -20,8 +20,19 @@ class UserAuthenticationsTest < ApplicationSystemTestCase
     assert_current_path extract_recipes_path
   end
 
+  test "user can sign up and create a new account" do
+    visit root_path
+    click_link "Sign Up"
+    fill_in "exampleFormControlInput1", with: "user1@example.com"
+    fill_in "exampleFormControlTextarea1", with: "password1"
+    click_button "Sign Up"
+
+    assert_text "Account created successfully!"
+    assert_current_path root_path
+  end
+
   test "user can log in, perform main function, view recipe history, and logout" do
-    user = User.create!(email: "user1@example.com", password: "password")
+    user = User.create!(email: "user2@example.com", password: "password")
 
     visit login_path
     fill_in "exampleFormControlInput1", with: user.email
@@ -45,7 +56,7 @@ class UserAuthenticationsTest < ApplicationSystemTestCase
   end
 
   test "user cannot login with incorrect details" do
-    user = User.create!(email: "user2@example.com", password: "password123")
+    user = User.create!(email: "user3@example.com", password: "password123")
 
     visit login_path
     fill_in "exampleFormControlInput1", with: "wrong@email.com"
