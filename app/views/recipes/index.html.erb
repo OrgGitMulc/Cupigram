@@ -1,22 +1,3 @@
-<nav class="navbar bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="<%= root_path %>">Cupigram</a>
-    <div>
-    <% if session[:user_id] %>
-      <%= link_to "View Recipe History", user_path(session[:user_id]) %>
-      <%= form_with url: logout_path, method: :delete, local: true do %>
-        <%= submit_tag "Logout"%>
-      <% end %>
-
-    <% else %>
-    <%= link_to "Sign Up", signup_path, class: "btn btn-outline-primary" %>  
-    <%= link_to "Login", login_path, class: "btn btn-outline-primary" %>
-    <% end %>
-    </div>
-  </div>
-</nav>
-
-
 <div class="container-fluid">
   <div class="row text-center">
     <% if flash[:alert] %>
@@ -29,20 +10,23 @@
       </div>
     <% end %>
   </div>
-  <div class="row">
-    <div class="col align-self-center">
-      <h4 class="text-center">How it works</h4>
-        <div class="container">
-          <ul class="list-group">
-            <li class="list-group-item">Item 1</li>
-            <li class="list-group-item">Item 2</li>
-          </ul>
-          <ul>
-            <li>Step 1</li>
-          </ul>
-        </div>
-      </div>
+</div>
+
+<div class="container-fluid bg-light bg-opacity-50">
+  <div class="row text-center">
+    <div class="col">
+      <h4>How It Works</h4>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
     </div>
+  </div>
+</div>
+
+<div class="container-fluid">
   <div class="row text-center">
     <div class="col">
       <%= form_with url: extract_recipes_path, method: :post, local: true do |f| %>
@@ -52,43 +36,84 @@
         </div>
 
         <div>
-          <%= f.label :unit, "Convert to:" %><br>
+          <%= f.label :unit, "Convert to:", class: "h4" %><br>
           <%= f.radio_button :unit, "metric" %> <%= f.label :unit, "Metric Units" %> | 
           <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
         </div>
         <div>
-          <%= f.submit "Extract Recipe", class: "btn btn-primary" %>
+          <%= f.submit "Extract Recipe", class: "btn p-btn btn-light" %>
         </div>
       <% end %>
-  </div>
-  </div>
-  <div class="row text-center">
-    <div class="col">
-    <h4>Carosel here</h4>
-    <h4>Works on:</h4>
-      <p>https://www.seriouseats.com/</p>
-      <p>https://www.allrecipes.com/</p>
-      <p>https://www.simplyrecipes.com/</p>
     </div>
-  </div>
   </div>
 </div>
 
 
-<% if @ingredients.any? %>
-  <h2>Extracted Ingredients</h2>
-  <ul>
-    <% @ingredients.each do |ingredient| %>
-      <li><%= ingredient %></li>
-    <% end %>
-  </ul>
-<% end %>
+<div class="container-fluid">
+  <div class="row text-center">
 
-<% if @parsed_ingredients.any? %>
-  <h2>Parsed Ingredients</h2>
-  <ul>
-    <% @parsed_ingredients.each do |parsed_ingredient| %>
-      <li><%= parsed_ingredient %></li>
-    <% end %>
-  </ul>
-<% end %>
+    <div class="col">
+      <% if @parsed_ingredients.any? %>
+        <h2>Your Retrieved Recipe</h2>
+        <ul class="list-group list-group-flush bg-opacity-25">
+          <% @parsed_ingredients.each do |parsed_ingredient| %>
+            <li class="list-group-item"><%= parsed_ingredient %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @ingredients.any? %>
+  <div class="row">
+
+    <div class="col">
+      <div class="accordion accordion-flush" id="accordionFlushExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Original Recipe
+            </button>
+          </h2>
+          <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                <p>Source <a href="<%= @url%>" target="_blank">here</a></p>
+                <ul>
+                  <% @ingredients.each do |ingredient| %>
+                    <li><%= ingredient %></li>
+                  <% end %>
+                </ul>
+            </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div> 
+  <% end %>
+</div>
+
+
+<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <%# <img src="..." class="d-block w-100" alt="..."> %>
+      <p class="text-center">https://www.simplyrecipes.com/</p>
+    </div>
+    <div class="carousel-item">
+      <%# <img src="..." class="d-block w-100" alt="..."> %>
+      <p class="text-center">https://www.seriouseats.com/</p>
+    </div>
+    <div class="carousel-item">
+      <%# <img src="..." class="d-block w-100" alt="..."> %>
+      <p class="text-center">https://www.allrecipes.com/</p>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
