@@ -13,3 +13,24 @@
  *= require_tree .
  *= require_self
  */
+
+
+body {
+    background-image: url(main_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+
+    overflow-x: hidden;
+}
+
+.p-color {
+    background-color: #46A785;
+    opacity: 50%;
+}
+
+.p-btn {
+    background-color: #46A785;
+    outline: black;
+}
