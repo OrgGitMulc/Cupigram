@@ -103,24 +103,27 @@
       <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <%# <img src="..." class="d-block w-100" alt="..."> %>
-            <p class="text-center">https://www.simplyrecipes.com/</p>
+            <a href="https://www.simplyrecipes.com/" target="_blank">
+              <img src="<%= asset_path('simply_recipes_logo.png') %>" class="d-block mx-auto carousel-img" alt="Simply Recipes logo">
+            </a>
           </div>
           <div class="carousel-item">
-            <%# <img src="..." class="d-block w-100" alt="..."> %>
-            <p class="text-center">https://www.seriouseats.com/</p>
+            <a href="https://www.seriouseats.com/" target="_blank">
+              <img src="<%= asset_path('serious_eats_logo.png') %>" class="d-block mx-auto carousel-img" alt="Serious eats logo">
+            </a>
           </div>
           <div class="carousel-item">
-            <%# <img src="..." class="d-block w-100" alt="..."> %>
-            <p class="text-center">https://www.allrecipes.com/</p>
+            <a href="https://www.allrecipes.com/" target="_blank">
+            <img src="<%= asset_path('all_recipes_logo.png') %>" class="d-block mx-auto carousel-img" alt="All recipes logo">
+            </a>
           </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="carousel-control-prev-icon p-color" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="carousel-control-next-icon p-color" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>

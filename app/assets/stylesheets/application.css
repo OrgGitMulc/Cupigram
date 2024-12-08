@@ -55,3 +55,9 @@ hr:before {
     border-width: 0 0 1px 0;
     border-radius: 1.25rem;
 }
+
+.carousel-img {
+    max-width: 60%; /* Resize images to 60% of the container */
+    max-height: 250px; /* Ensure the height is constrained */
+    object-fit: contain; /* Prevent distortion */
+  }
