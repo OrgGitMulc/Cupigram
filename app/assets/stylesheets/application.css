@@ -34,3 +34,24 @@ body {
     background-color: #46A785;
     outline: black;
 }
+
+
+hr {
+    overflow: visible; /* For IE */
+    height: 1.875rem;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 1.25rem;
+}
+
+hr:before {
+    display: block;
+    content: "";
+    height: 1.875rem;
+    margin-top: -1.938rem;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 1.25rem;
+}

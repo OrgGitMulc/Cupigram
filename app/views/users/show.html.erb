@@ -1,22 +1,31 @@
-<body>
-  <h1>Your Recipe History</h1>
+<div class="container-fluid bg-light bg-opacity-50 mt-4 mb-4">
+  <div class="row text-center">
+    <div class="col">
+      <h1>Your Recipe History</h1>
 
-  <%= link_to "Back", recipes_path, class: "btn btn-primary" %>
+      <%= link_to "Back", recipes_path, class: "btn p-btn btn-light" %>
+    </div>
+  </div>
 
-  <% if @recipe_histories.any? %>
-    <ul>
-      <% @recipe_histories.each do |recipe_history| %>
-        <li>
-          <strong>URL:</strong> <%= link_to recipe_history.url, recipe_history.url, target: "_blank" %>
-          <ul>
-            <% recipe_history.ingredients.each do |ingredient| %>
-              <li><%= ingredient %></li>
-            <% end %>
-          </ul>
-        </li>
+  <div class="row mt-4 mb-4">
+    <div class="col">
+      <% if @recipe_histories.any? %>
+        <ul>
+          <% @recipe_histories.each do |recipe_history| %>
+            <li class="mt-4 mb-4">
+              <strong>Original recipe from:</strong> <%= link_to recipe_history.url, recipe_history.url, target: "_blank" %>
+              <ul>
+                <% recipe_history.ingredients.each do |ingredient| %>
+                  <li><%= ingredient %></li>
+                <% end %>
+              </ul>
+            </li>
+            <hr>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No recipe history found.</p>
       <% end %>
-    </ul>
-  <% else %>
-    <p>No recipe history found.</p>
-  <% end %>
-</body>
+    </div>
+  </div>
+</div>
