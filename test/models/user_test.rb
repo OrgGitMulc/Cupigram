@@ -21,4 +21,15 @@ class UserTest < ActiveSupport::TestCase
     user = User.create(email: "user2@example.com", password: "password123")
     assert user.authenticate("password123")
   end
+
+  test "should not accept false username" do
+    User.create(email: "user3@example.com", password: "password789")
+    user = User.find_by(email: "falseemail@example.com")
+    assert_nil user
+  end
+
+  test "should not accept false password" do
+    user = User.create(email: "user4@example.com", password: "password9")
+    assert_not user.authenticate("password")
+  end
 end
