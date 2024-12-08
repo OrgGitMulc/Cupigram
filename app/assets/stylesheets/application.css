@@ -61,3 +61,8 @@ hr:before {
     max-height: 7rem; 
     object-fit: contain; 
   }
+
+.main-logo {
+    width: 50%;
+    height: 45%;
+}

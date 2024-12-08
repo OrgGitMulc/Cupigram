@@ -16,7 +16,7 @@
   <body>
     <nav class="navbar bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="<%= root_path %>">Cupigram</a>
+        <a class="navbar-brand" href="<%= root_path %>"><img src="<%= asset_path('cupigram_main_logo.png') %>" class="main-logo"></a>
         <div class="d-flex justify-content-end">
         <% if session[:user_id] %>
           <%= link_to "View Recipe History", user_path(session[:user_id]), class: "btn p-btn btn-light" %>
