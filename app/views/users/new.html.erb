@@ -1,17 +1,20 @@
+<%# Alert & notice container for msgs to users %>
 <div class="container-fluid">
   <div class="row text-center">
     <% if flash[:alert] %>
-      <div class="alert alert-danger">
+      <div class="alert alert-danger flash-message">
         <%= flash[:alert] %>
       </div>
     <% elsif flash[:notice] %>
-      <div class="alert alert-success">
+      <div class="alert alert-success flash-message">
         <%= flash[:notice] %>
       </div>
     <% end %>
   </div>
+</div>
 
-  <div class="row">
+<div class="container-fluid bg-light bg-opacity-50">
+  <div class="row mt-5">
     <div class="col">
     </div>
     <div class="col text-center">
@@ -29,7 +32,7 @@
         </div>
 
         <div class="mb-3">
-          <%= form.submit "Sign Up", class: "btn btn-primary" %>
+          <%= form.submit "Sign Up", class: "btn p-btn btn-light" %>
         </div>
       <% end %>
     </div>

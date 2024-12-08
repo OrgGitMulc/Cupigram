@@ -1,18 +1,20 @@
+<%# Alert & notice container for msgs to users %>
 <div class="container-fluid">
   <div class="row text-center">
     <% if flash[:alert] %>
-      <div class="alert alert-danger">
+      <div class="alert alert-danger flash-message">
         <%= flash[:alert] %>
       </div>
     <% elsif flash[:notice] %>
-      <div class="alert alert-success">
+      <div class="alert alert-success flash-message">
         <%= flash[:notice] %>
       </div>
     <% end %>
   </div>
 </div>
 
-<div class="container-fluid bg-light bg-opacity-50">
+<%# Intro container to explain how app works to user %>
+<div class="container-fluid bg-light bg-opacity-50 mt-4 mb-4">
   <div class="row text-center">
     <div class="col">
       <h4>How It Works</h4>
@@ -26,7 +28,10 @@
   </div>
 </div>
 
-<div class="container-fluid">
+
+
+<%# Form for URL submission to extract recipe %>
+<div class="container-fluid mt-4 mb-4">
   <div class="row text-center">
     <div class="col">
       <%= form_with url: extract_recipes_path, method: :post, local: true do |f| %>
@@ -48,8 +53,8 @@
   </div>
 </div>
 
-
-<div class="container-fluid">
+<%# Retrieved recipe container, results displayed here. Also displays raw ingredients from URL in accordian %>
+<div class="container-fluid mt-4 mb-4">
   <div class="row text-center">
 
     <div class="col">
@@ -65,8 +70,7 @@
   </div>
 
   <% if @ingredients.any? %>
-  <div class="row">
-
+  <div class="row mt-4 mb-4">
     <div class="col">
       <div class="accordion accordion-flush" id="accordionFlushExample">
         <div class="accordion-item">
@@ -92,28 +96,34 @@
   <% end %>
 </div>
 
-
-<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <%# <img src="..." class="d-block w-100" alt="..."> %>
-      <p class="text-center">https://www.simplyrecipes.com/</p>
-    </div>
-    <div class="carousel-item">
-      <%# <img src="..." class="d-block w-100" alt="..."> %>
-      <p class="text-center">https://www.seriouseats.com/</p>
-    </div>
-    <div class="carousel-item">
-      <%# <img src="..." class="d-block w-100" alt="..."> %>
-      <p class="text-center">https://www.allrecipes.com/</p>
+<%# Carousel to display suitable sites for recipe extraction %>
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col">
+      <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <%# <img src="..." class="d-block w-100" alt="..."> %>
+            <p class="text-center">https://www.simplyrecipes.com/</p>
+          </div>
+          <div class="carousel-item">
+            <%# <img src="..." class="d-block w-100" alt="..."> %>
+            <p class="text-center">https://www.seriouseats.com/</p>
+          </div>
+          <div class="carousel-item">
+            <%# <img src="..." class="d-block w-100" alt="..."> %>
+            <p class="text-center">https://www.allrecipes.com/</p>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
     </div>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
 </div>

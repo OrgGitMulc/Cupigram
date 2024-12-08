@@ -64,7 +64,7 @@ class RecipesController < ApplicationController
     if session[:user_id]
       user = User.find(session[:user_id])
       recipe_history = user.recipe_histories.create(
-        url: url, 
+        url: @url, 
         ingredients: @parsed_ingredients # Save as raw data
       )
 

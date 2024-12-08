@@ -29,3 +29,7 @@ Tech used:
  - Devise
  - bcrypt
  - Bootstrap
+
+Sites used:
+ - https://www.freepik.com/ for background imgs
+ - https://coolors.co/ for colour scheme
