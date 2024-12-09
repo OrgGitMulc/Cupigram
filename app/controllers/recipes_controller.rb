@@ -11,8 +11,8 @@ class RecipesController < ApplicationController
   end
 
   def extract
-    if params[:url].blank?
-      flash[:alert] = "URL is required to extract the recipe."
+    if params[:url].blank? || params[:unit].blank?
+      flash[:alert] = "URL & conversion selection is required to extract the recipe."
       return redirect_to recipes_path  # Or render :index if you prefer not to redirect
     end
 
