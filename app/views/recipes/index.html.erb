@@ -19,10 +19,10 @@
     <div class="col">
       <h4>How It Works</h4>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        All you need to get started in <strong>Cupigram</strong> is a URL <br> 
+        Simply paste the <strong>URL</strong> into the field below <br> 
+        Select the <strong>units</strong> you want to convert to. Either convert to <strong>Metric</strong> units or <strong>US Customary</strong> units. <br>
+        <strong>Cupigram</strong> can currently convert recipes from these <a href="#carouselExampleFade">websites</a>.
       </p>
     </div>
   </div>
@@ -30,7 +30,7 @@
 
 
 
-<%# Form for URL submission to extract recipe %>
+<%# Form for URL submission to extract recipe. Calls extraction & conversion method %>
 <div class="container-fluid mt-4 mb-4">
   <div class="row text-center">
     <div class="col">
@@ -42,9 +42,15 @@
 
         <div>
           <%= f.label :unit, "Convert to:", class: "h4" %><br>
-          <%= f.radio_button :unit, "metric" %> <%= f.label :unit, "Metric Units" %> | 
-          <%= f.radio_button :unit, "us_customary" %> <%= f.label :unit, "US Customary Units" %>
+          <div class="btn-group" role="group" aria-label="Unit Conversion">
+            <%= f.radio_button :unit, "metric", class: "btn-check", id: "btn-metric" %>
+            <%= f.label :unit, "Metric Units", for: "btn-metric", class: "btn btn-outline-primary" %>
+
+            <%= f.radio_button :unit, "us_customary", class: "btn-check", id: "btn-us_customary" %>
+            <%= f.label :unit, "US Cust. Units", for: "btn-us_customary", class: "btn btn-outline-primary" %>
+          </div>
         </div>
+        <br>
         <div>
           <%= f.submit "Extract Recipe", class: "btn p-btn btn-light" %>
         </div>
@@ -52,6 +58,7 @@
     </div>
   </div>
 </div>
+
 
 <%# Retrieved recipe container, results displayed here. Also displays raw ingredients from URL in accordian %>
 <div class="container-fluid mt-4 mb-4">
@@ -65,6 +72,12 @@
             <li class="list-group-item"><%= parsed_ingredient %></li>
           <% end %>
         </ul>
+      <% else %>
+
+      <%# Divider div to separate out the home page %> 
+      <div style="height: 18rem;">
+      </div>
+
       <% end %>
     </div>
   </div>
@@ -97,9 +110,10 @@
 </div>
 
 <%# Carousel to display suitable sites for recipe extraction %>
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4 mb-4">
   <div class="row">
     <div class="col">
+      <h4 class="text-center">Cupigram currently works with these sites:</h4>
       <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
