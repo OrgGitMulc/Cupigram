@@ -13,9 +13,12 @@
  *= require_tree .
  *= require_self
  */
-
+ 
+ @import url('https://fonts.googleapis.com/css2?family=Quicksand&family=Poppins&display=swap');
 
 body {
+    font-family: Quicksand, sans-serif;
+    font-weight: 500;
     background-image: url(main_bg.jpg);
     background-repeat: no-repeat;
     background-position: center;
