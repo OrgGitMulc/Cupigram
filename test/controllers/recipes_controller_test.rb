@@ -22,11 +22,11 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
   test "should not extract data without a URL" do
     post extract_recipes_url, params: { unit: "metric" }
     assert_response :redirect
-    assert_match "URL is required to extract the recipe.", flash[:alert]
+    assert_match "URL & conversion selection is required to extract the recipe.", flash[:alert]
   end
 
-  test "should extract information but not convert" do
+  test "should not extract information without selecting unit" do
     post extract_recipes_url, params: { url: "https://www.allrecipes.com/mini-chicken-pot-pies-recipe-8735456" }
-    assert_response :success
+    assert_response :redirect
   end
 end
