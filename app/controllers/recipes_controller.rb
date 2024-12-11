@@ -1,4 +1,3 @@
-# app/controllers/recipes_controller.rb
 require 'nokogiri'
 require 'open-uri'
 require 'set'
@@ -7,58 +6,55 @@ class RecipesController < ApplicationController
   include RecipesHelper
   def index
     @ingredients = []
-    @parsed_ingredients = [] # For storing parsed ingredients separately
+    # Show the parsed ingredients
+    @parsed_ingredients = []
   end
 
   def extract
     if params[:url].blank? || params[:unit].blank?
       flash[:alert] = "URL & conversion selection is required to extract the recipe."
-      return redirect_to recipes_path  # Or render :index if you prefer not to redirect
+      return redirect_to recipes_path
     end
 
     @url = params[:url]
-    headers = { "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
-    unit = params[:unit]
+    headers = { "User-Agent" => "Mozilla/5.0 (Windows; Intel) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36" }
     begin
       doc = Nokogiri::HTML(URI.open(@url, headers))
       ingredients = extract_ingredients(doc)
-
-      # Print the ingredients for debugging purposes
-      puts "Ingredients: #{ingredients.join(" ")}"
 
       # Render the extracted data
       @ingredients = ingredients
       @parsed_ingredients = parse_existing_ingredients(@ingredients)
 
-      # conversion helpers & logic go here
-      puts "Selected unit: #{unit}"
+      
 
     if params[:unit] == "us_customary"
-      puts "Convert to US Customary Units"
       @parsed_ingredients = @parsed_ingredients.map do |ingredient|
-        if ingredient.is_a?(Hash) && ingredient[:unit] # Process only if it's a hash and has a unit
+        # Will only use helpers if ingredients are in a hash
+        if ingredient.is_a?(Hash) && ingredient[:unit]
           convert_to_us_custom(ingredient)
         elsif ingredient.is_a?(Hash)
-          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip # If it's a hash without a unit
+          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip
         else
-          ingredient # If it's a string, return as is
+          # if no units, just return raw
+          ingredient 
         end
       end
     
     elsif params[:unit] == "metric"
-      puts "Convert to Metric Units"
       @parsed_ingredients = @parsed_ingredients.map do |ingredient|
-        if ingredient.is_a?(Hash) && ingredient[:unit] # Process only if it's a hash and has a unit
+        # Will only use helpers if ingredients are in a hash
+        if ingredient.is_a?(Hash) && ingredient[:unit]
           convert_to_metric(ingredient)
         elsif ingredient.is_a?(Hash)
-          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip # If it's a hash without a unit
+          "#{ingredient[:quantity]} #{ingredient[:ingredient]}".strip 
         else
-          ingredient # If it's a string, return as is
+          # if no units, just return raw
+          ingredient 
         end
       end
     
-    else
-      puts "No units selected"
+    
     end
     
     if session[:user_id]
@@ -91,10 +87,10 @@ class RecipesController < ApplicationController
     # Convert to set, easier to manipulate and concat
     ingredients = Set.new
 
-    # this targets generic ingredients heading found in most HTML 
+    # this targets generic ingredients heading found in most HTML, headers with "Ingredients"
     ingredients_heading = doc.at_xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'Ingredients')]")
 
-    # targets ingredients that conmtain the heading What You Need instead of the ingredients
+    # targets ingredients that contain the heading What You Need instead of the ingredients
     needs_heading = doc.xpath("//*[self::h2 or self::h3 or self::h4][contains(text(), 'What you need')]")
 
     # targets any ingredients that have the ingredients string in any tab based sections
@@ -114,12 +110,14 @@ class RecipesController < ApplicationController
         if ul_elements.any?
           ul_elements.each do |ul_element|
             ul_element.xpath(".//li").each do |li|
-              ingredients.add(li.text.strip)  # Add ingredient to the Set
+              #add the ingredient to the set
+              ingredients.add(li.text.strip)
             end
           end
         elsif ul_element
           ul_element.xpath(".//li").each do |li|
-            ingredients.add(li.text.strip)  # Add ingredient to the Set
+            # add the ingredient to the set
+            ingredients.add(li.text.strip)
           end
         elsif li_elements
           li_elements.each do |li|
@@ -141,7 +139,7 @@ class RecipesController < ApplicationController
         ul_elements.each do |ul_element|
           ul_element.xpath(".//li").each do |li|
             text = li.text.strip
-            # removes any nutrional info that may be extracted
+            # removes any info unrelated to ingredient. it's often nutritional info
             unless text =~ /kcal|fat|saturates|carbs|sugars|fibre|protein|salt/i
               ingredients.add(text)
             end
@@ -162,7 +160,7 @@ class RecipesController < ApplicationController
   end
 
   def parse_line(line)
-    # Adjusted regex to capture quantity, optional unit, and ingredient
+    # regex to capture quantity, optional unit, and ingredient
     match = line.match(/^(?<quantity>\d+\s\d+\/\d+|\d+\/\d+|\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s?(?<ingredient>.+)$/)
   
     if match
@@ -174,8 +172,6 @@ class RecipesController < ApplicationController
     else
       # Return the line as-is if it doesn't match the pattern
       { ingredient: line.strip, unit: nil, quantity: nil }
-      # "#{match[:quantity]} #{match[:unit]} #{match[:ingredient]}"
-      # line.strip
     end
   end
 end
