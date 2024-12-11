@@ -72,7 +72,7 @@ class RecipesController < ApplicationController
     end
 
       render :index
-
+    # if extract method cannot retrieve the URL, or is unable to access it a HTTPError is thrown 
     rescue OpenURI::HTTPError => e
       puts "Error fetching the URL: #{e.message}"
       @ingredients = ["Unable to access the provided URL."]
@@ -95,7 +95,7 @@ class RecipesController < ApplicationController
 
     # targets any ingredients that have the ingredients string in any tab based sections
     tabs_heading = ingredients_heading&.xpath("following::section[1] | following::div[1]") ||
-              doc.at_css("div.tabbed-list") ||  # fallback to specific known structures
+              doc.at_css("div.tabbed-list") || 
               doc.at_xpath("//*[contains(@class, 'ingredients') or contains(@class, 'list')]")
 
     if ingredients_heading || needs_heading
@@ -107,14 +107,7 @@ class RecipesController < ApplicationController
         li_elements = ul_element.xpath(".//li")
         ul_elements = container.xpath(".//ul")
 
-        if ul_elements.any?
-          ul_elements.each do |ul_element|
-            ul_element.xpath(".//li").each do |li|
-              #add the ingredient to the set
-              ingredients.add(li.text.strip)
-            end
-          end
-        elsif ul_element
+        if ul_element
           ul_element.xpath(".//li").each do |li|
             # add the ingredient to the set
             ingredients.add(li.text.strip)
