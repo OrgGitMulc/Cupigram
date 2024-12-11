@@ -146,12 +146,14 @@ class RecipesController < ApplicationController
     ingredients.empty? ? ["No ingredients found in the expected format."] : ingredients.to_a
   end
 
+  # takes populated ingredients and calls parse_line func on each one
   def parse_existing_ingredients(ingredients)
     ingredients.map do |ingredient|
       parse_line(ingredient)
     end
   end
 
+  # parses txt and differenciates between quantity, unit & ingredient
   def parse_line(line)
     # regex to capture quantity, optional unit, and ingredient
     match = line.match(/^(?<quantity>\d+\s\d+\/\d+|\d+\/\d+|\d+(\.\d+)?)\s?(?<unit>[a-zA-Z%]+)?\s?(?<ingredient>.+)$/)
@@ -159,11 +161,11 @@ class RecipesController < ApplicationController
     if match
       {
         quantity: match[:quantity].strip,
-        unit: match[:unit]&.strip, # Only add `unit` if it’s present
+        unit: match[:unit]&.strip, # Only add unit if present
         ingredient: match[:ingredient].strip
-      }.compact # Remove any nil values from the hash
+      }.compact # Remove any empty values if in hash
     else
-      # Return the line as-is if it doesn't match the pattern
+      # Return line if it doesn't match the pattern
       { ingredient: line.strip, unit: nil, quantity: nil }
     end
   end
