@@ -26,8 +26,7 @@ class RecipesController < ApplicationController
       @ingredients = ingredients
       @parsed_ingredients = parse_existing_ingredients(@ingredients)
 
-    # This code block calls the conversion helper methods found in recipes_helper  
-    
+    # This code block calls the conversion helper methods found in recipes_helper 
     if params[:unit] == "us_customary"
       @parsed_ingredients = @parsed_ingredients.map do |ingredient|
         # Will only use helpers if ingredients are in a hash
