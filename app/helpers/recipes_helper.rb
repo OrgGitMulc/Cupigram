@@ -2,19 +2,19 @@ require 'rational'
 
 module RecipesHelper
   UNIT_CONVERSIONS = {
-    "cup" => 240,       # 1 cup = 240 grams
-    "cups" => 240,       # 1 cup = 240 grams
-    "tbsp" => 15,       # 1 tablespoon = 15 grams
-    "tablespoon" => 15,       # 1 tablespoon = 15 grams
-    "tablespoons" => 15,       # 1 tablespoon = 15 grams
-    "tsp" => 5,         # 1 teaspoon = 5 grams
-    "teaspoon" => 5,         # 1 teaspoon = 5 grams
-    "teaspoons" => 5,        # 1 teaspoon = 5 grams
-    "pounds" => 453.6,    # 1 pound = 453.6 grams
-    "pound" => 453.6,    # 1 pound = 453.6 grams
-    "gram" => 0.00422675,  # Conversion from grams to cups (general solid density)
-    "g" => 0.00422675,  # Conversion from grams to cups (general solid density)
-    "ml" => 0.00422675,    # Conversion from milliliters to cups (liquids)
+    "cup" => 240, 
+    "cups" => 240, 
+    "tbsp" => 15,       
+    "tablespoon" => 15,    
+    "tablespoons" => 15,       
+    "tsp" => 5,         
+    "teaspoon" => 5,    
+    "teaspoons" => 5,        
+    "pounds" => 453.6,    
+    "pound" => 453.6,    
+    "gram" => 0.00422675,  # general solid density for us custom
+    "g" => 0.00422675,  # general solid density for metric
+    "ml" => 0.00422675,    # Conversion from milliliters to cups
   }.freeze
 
   DENSITIES = {
@@ -25,19 +25,24 @@ module RecipesHelper
     "oil" => 0.92          # 1 ml of oil = 0.92 grams
   }.freeze
 
-  # List of liquids that should be converted to milliliters
+  # List of liquids that can be converted 
   LIQUIDS = ["water", "milk", "buttermilk", "vegetable oil", "oil", "cream"].freeze
 
-  # Helper to parse quantity with Rational support
+  # Helper to convert number to a float
   def parse_quantity(quantity)
-    if quantity.include?(' ')  # Check for mixed numbers like "1 3/4"
+    # check for mixed numbers like "1 3/4"
+    if quantity.include?(' ')  
       whole, fraction = quantity.split(' ')
-      # Convert the fraction part (e.g., "3/4") to Rational, and add to the whole number
+      # Convert the fraction to Rational & then concat to the whole number
       total = whole.to_i + Rational(fraction)
-      total.to_f  # Return as a float
-    elsif quantity.include?('/')  # Handle fractions like "1/2"
-      Rational(quantity).to_f  # Convert fraction like "1/2" to float
-    else  # Handle whole numbers or decimals
+      # to_f converts to a float num, part of the Rational native ruby class
+      total.to_f
+      # Handle fractions
+    elsif quantity.include?('/')  
+      # Convert fraction
+      Rational(quantity).to_f 
+    # Handle whole numbers or decimals 
+    else  
       Rational(quantity).to_f
     end
   end
@@ -48,8 +53,7 @@ module RecipesHelper
     unit = parsed_ingredient[:unit]&.downcase
     ingredient_name = parsed_ingredient[:ingredient]
 
-    # Check if the ingredient has a density specified
-    # density = DENSITIES[ingredient_name.downcase] if DENSITIES.key?(ingredient_name.downcase)
+    # Find density and liquid status
     density_key = DENSITIES.keys.find { |key| ingredient_name.downcase.include?(key) }
     density = DENSITIES[density_key] if density_key
     is_liquid = LIQUIDS.any? { |liquid| ingredient_name.downcase.include?(liquid) }
@@ -70,11 +74,12 @@ module RecipesHelper
         "#{metric_quantity.round(2)}g #{ingredient_name}"
       end
     else
-      # Return the original ingredient if no conversion is applicable
+      # Return the original ingredient if no unit
       "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
     end
   end
 
+  # Helper to convert a parsed ingredient to us customary if a unit is present
   def convert_to_us_custom(parsed_ingredient)
     quantity = parse_quantity(parsed_ingredient[:quantity])
     unit = parsed_ingredient[:unit]&.downcase
@@ -103,7 +108,7 @@ module RecipesHelper
       end
   
     else
-      # Return original ingredient format if no conversion unit found
+      # Return the original ingredient if no unit
       "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
     end
   end
