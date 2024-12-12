@@ -12,9 +12,9 @@ module RecipesHelper
     "teaspoons" => 5,        
     "pounds" => 453.6,    
     "pound" => 453.6,    
-    "gram" => 0.00422675,  # general solid density for us custom
-    "g" => 0.00422675,  # general solid density for metric
-    "ml" => 0.00422675,    # Conversion from milliliters to cups
+    "gram" => 0.00422675, 
+    "g" => 0.00422675,  
+    "ml" => 0.00422675,   
   }.freeze
 
   DENSITIES = {
