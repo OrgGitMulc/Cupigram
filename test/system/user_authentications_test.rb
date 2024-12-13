@@ -1,7 +1,3 @@
-# Test Type: System Tests
-# Test user login with correct and incorrect credentials.
-# Ensure flash messages appear for errors.
-
 require "application_system_test_case"
 
 class UserAuthenticationsTest < ApplicationSystemTestCase

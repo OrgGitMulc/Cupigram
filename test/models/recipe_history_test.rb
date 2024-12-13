@@ -1,6 +1,3 @@
-# Test Type: Model Tests
-# Validate saving and retrieving recipe histories.
-
 require "test_helper"
 
 class RecipeHistoryTest < ActiveSupport::TestCase

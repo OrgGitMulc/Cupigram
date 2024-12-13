@@ -1,7 +1,3 @@
-# Test Type: Model Tests
-# Create and validate unique email.
-# Ensure password is encrypted and saved correctly.
-
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
