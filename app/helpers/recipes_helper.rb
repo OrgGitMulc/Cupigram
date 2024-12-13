@@ -2,8 +2,8 @@ require 'rational'
 
 module RecipesHelper
   UNIT_CONVERSIONS = {
-    "cup" => 240, 
-    "cups" => 240, 
+    "cup" => 236.588125, 
+    "cups" => 236.588125, 
     "tbsp" => 15,       
     "tablespoon" => 15,    
     "tablespoons" => 15,       
@@ -28,8 +28,10 @@ module RecipesHelper
   # List of liquids that can be converted 
   LIQUIDS = ["water", "milk", "buttermilk", "vegetable oil", "oil", "cream"].freeze
 
-  # Helper to convert number to a float
   def parse_quantity(quantity)
+    # Ensure quantity is a string before processing
+    quantity = quantity.to_s.strip
+  
     # check for mixed numbers like "1 3/4"
     if quantity.include?(' ')  
       whole, fraction = quantity.split(' ')
@@ -37,13 +39,12 @@ module RecipesHelper
       total = whole.to_i + Rational(fraction)
       # to_f converts to a float num, part of the Rational native ruby class
       total.to_f
-      # Handle fractions
+    # Handle fractions
     elsif quantity.include?('/')  
-      # Convert fraction
-      Rational(quantity).to_f 
+      Rational(quantity).to_f
     # Handle whole numbers or decimals 
     else  
-      Rational(quantity).to_f
+      quantity.to_f  # Ensure whole numbers or decimals are returned as a Float
     end
   end
 
@@ -75,7 +76,7 @@ module RecipesHelper
       end
     else
       # Return the original ingredient if no unit
-      "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
+      "#{quantity.round(0)}#{unit} #{ingredient_name}".strip
     end
   end
 
@@ -109,7 +110,7 @@ module RecipesHelper
   
     else
       # Return the original ingredient if no unit
-      "#{quantity.round(0)} #{unit} #{ingredient_name}".strip
+      "#{quantity.round(0)}#{unit} #{ingredient_name}".strip
     end
   end
 end
