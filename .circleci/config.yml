@@ -72,6 +72,8 @@ workflows:
             branches: 
               only:
                 - main
+          requires:
+            - test
       - deploy:
           filters:
             branches:
