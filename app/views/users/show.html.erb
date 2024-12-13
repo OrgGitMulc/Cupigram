@@ -14,6 +14,7 @@
           <% @recipe_histories.each do |recipe_history| %>
             <li class="mt-4 mb-4">
               <strong>Original recipe from:</strong> <%= link_to recipe_history.url, recipe_history.url, target: "_blank" %>
+              <p>Searched <%= recipe_history.created_at %></p>
               <ul>
                 <% recipe_history.ingredients.each do |ingredient| %>
                   <li><%= ingredient %></li>

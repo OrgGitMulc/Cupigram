@@ -8,7 +8,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
 
   end
 
-  test "should loginm extract recipe, and save ingredients" do
+  test "should login extract recipe, and save ingredients" do
     post login_url, params: { email: @user.email, password: "password" }
     # note redirect is what happens when user logs in
     assert_response :redirect

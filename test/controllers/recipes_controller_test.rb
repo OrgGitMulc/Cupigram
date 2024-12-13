@@ -1,8 +1,3 @@
-# Test Type: Controller Tests
-# Ensure the extract method handles valid inputs correctly.
-# Test edge cases, such as missing or invalid URLs.
-# Verify that recipe histories are saved to the database when logged in.
-
 require "test_helper"
 
 class RecipesControllerTest < ActionDispatch::IntegrationTest
