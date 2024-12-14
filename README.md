@@ -22,16 +22,3 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
-
-
-Tech used:
- - Nokogiri
- - Devise
- - bcrypt
- - Bootstrap
-
-Sites used:
- - https://www.freepik.com/ for background imgs
- - https://coolors.co/ for colour scheme
- - https://icons8.com/icons/set/cup for favicon
- - https://deepai.org/
